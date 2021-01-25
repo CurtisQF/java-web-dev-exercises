@@ -1,6 +1,17 @@
 package org.launchcode.java.demos.lsn4classes2;
 
+import java.util.Objects;
+
 public class Student {
+
+    public static void main (String[] args) {
+        Student testCase = new Student("Curtis", 1, 30, 2.0);
+        System.out.println(testCase.toString());
+        Student testCase2 = new Student ("Curtis");
+        Teacher teacher = new Teacher("George", "Max", "Geo", 2);
+
+        System.out.println(testCase.equals(teacher));
+    }
 
     private static int nextStudentId = 1;
     private String name;
@@ -30,21 +41,86 @@ public class Student {
 
 
      //TODO: Uncomment and complete the getGradeLevel method here:
-//    public String getGradeLevel() {
-//        // Determine the grade level of the student based on numberOfCredits
-//    }
+    public String getGradeLevel() {
+        // Determine the grade level of the student based on numberOfCredits
+        String gradeLevel;
+        if (this.numberOfCredits <= 29) {
+            gradeLevel = "Freshman";
+        } else if (this.numberOfCredits <= 59) {
+            gradeLevel = "Sophomore";
+        } else if (this.numberOfCredits <= 89) {
+            gradeLevel = "Junior";
+        } else if (this.numberOfCredits >= 90) {
+            gradeLevel = "Senior";
+        } else {
+            gradeLevel = null;
+        }
+        return gradeLevel;
+    }
 
     // TODO: Complete the addGrade method.
     public void addGrade(int courseCredits, double grade) {
-        // Update the appropriate fields: numberOfCredits, gpa
+        // Find CURRENT quality score
+        double currentTotalQualityScore = this.gpa * this.numberOfCredits;
+
+        // Find new quality score of parameters
+        double newQualityScore = courseCredits * grade;
+
+        // Update current total quality score
+        double newTotalQualityScore = currentTotalQualityScore + newQualityScore;
+
+        // Update total number of credits
+        int newTotalNumberOfCredits = this.numberOfCredits + courseCredits;
+        this.numberOfCredits = newTotalNumberOfCredits;
+
+        // Compute new GPA
+        double newGPA = newTotalQualityScore / newTotalNumberOfCredits;
+        this.gpa = newGPA;
     }
 
     // TODO: Add your custom 'toString' method here. Make sure it returns a well-formatted String rather
     //  than just the class fields.
 
+    @Override
+    public String toString() {
+        return "Student: " +
+                 name +
+                ", studentId= " + studentId +
+                ", numberOfCredits= " + numberOfCredits +
+                ", gpa= " + gpa +
+                '}';
+    }
+
+
     // TODO: Add your custom 'equals' method here. Consider which fields should match in order to call two
     //  Student objects equal.
 
+//    Auto-generated:
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Student student = (Student) o;
+//        return studentId == student.studentId;
+//    }
+
+    @Override
+    public boolean equals(Object obj) {
+        //Check of the object is an instance of Student - return false if it is NOT
+        if ((obj instanceof Student) == false) return false;
+        //Create a new student object with the Object parameter
+        Student myStudentObj = (Student) obj;
+        //See if the new object name string equals the class (this.name) name
+        if (myStudentObj.name.equals(this.name)) return true;
+        else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentId);
+    }
+
+    //Getters and setters
     public String getName() {
         return name;
     }
@@ -77,13 +153,4 @@ public class Student {
         this.numberOfCredits = numberOfCredits;
     }
 
-    public static void main(String[] args) {
-        Student sally = new Student("Sally",1,1,4.0);
-        System.out.println("The Student class works! " + sally.getName() + " is a student!");
-        System.out.println(sally);
-        sally.addGrade(12, 3.5);
-        System.out.println(sally);
-        sally.addGrade(25, 3.8);
-        System.out.println(sally);
-    }
 }
